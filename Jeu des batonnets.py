@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from tkinter import *
 from tkinter.messagebox import *
 import random
 
+difficulty = 0
 callbackVar = 0
 Nom = 'Joueur 1'
 Nom2 = 'Joueur 2'
@@ -18,9 +21,7 @@ def jvj():
     global Nom, Nom2, j1, j2
     jvj.place_forget()
     jvo.place_forget()
-    Nom = Entry(menu, bg="dodger blue")
     Nom.insert(END, 'Joueur 1')
-    Nom2 = Entry(menu, bg="firebrick1")
     Nom2.insert(END, 'Joueur 2')
     Nom.place(relx=0.5, rely=0.3, anchor=CENTER)
     Nom2.place(relx=0.5, rely=0.4, anchor=CENTER)
@@ -65,40 +66,49 @@ def jvo():
     impossible.place(relx=0.5, rely=0.65, anchor=CENTER)
 
 def soft():
+    global difficulty
     soft.place_forget()
     normal.place_forget()
     hard.place_forget()
     impossible.place_forget()
     menu.geometry("1000x500")
     menu['bg']='lightgray'
+    difficulty = 1
 
 def normal():
+    global difficulty
     soft.place_forget()
     normal.place_forget()
     hard.place_forget()
     impossible.place_forget()
     menu.geometry("1000x500")
     menu['bg']='lightgray'
+    difficulty = 2
 
 def hard():
+    global difficulty
     soft.place_forget()
     normal.place_forget()
     hard.place_forget()
     impossible.place_forget()
     menu.geometry("1000x500")
     menu['bg']='lightgray'
+    difficulty = 3
 
 def impossible():
+    global difficulty
     soft.place_forget()
     normal.place_forget()
     hard.place_forget()
     impossible.place_forget()
     menu.geometry("1000x500")
     menu['bg']='lightgray'
+    difficulty = 4
 
 def retour():
-    global callbackVar
+    global callbackVar, difficulty
     callbackVar = 0
+    difficulty = 0
     soft.place_forget()
     normal.place_forget()
     hard.place_forget()
@@ -124,10 +134,10 @@ def callback():
        callbackVar = 1
 
 def aide():
-    if askyesno('Aide : Comment gagner ?', 'Vous n`arrivez pas Ã  gagner au jeu des bÃ¢tonnets ? Voulez-vous connaÃ®tre l`astuce ?'):
-        if askyesno('Aide : Comment gagner ?', 'Le principe est trÃ¨s simple, pour gagner vous devez vous assurer de prendre l`avant dernier bÃ¢tonnet. Mais pour celÃ  vous devez cÃ´ntroler la partie. Voulez-vous savoir comment faire ?'):
-            if askyesno('Aide : Comment gagner ?', 'Comme l`on peut tirer 1 Ã  3 bÃ¢tonnets, celÃ  signifie que vous pouvez toujours complÃ©ter le tirage de l`adversaire pour arriver Ã  4. Ainsi le but est d`aller de 4 en 4 jusqu`Ã  l`avant dernier bÃ¢tonnet. Avez-vous besoin d`un exemple ?'):
-                 showwarning('Aide : Comment gagner ?', 'D`accord. Prenons l`exemple d`une partie courte Ã  15 bÃ¢tonnets. En suivant le rÃ©sonemment prÃ©cÃ©dent, vous devez pour gagner, obtenir le 14Ã¨me bÃ¢tonnet. Or pour l`atteindre vous devez aller de 4 en 4 et donc tenter de vous emparer des bÃ¢tonnets 2, 6 ou 10. Une fois ceci fait, il suffit de complÃ©ter le tirage de l`adversaire comme vu prÃ©cÃ©demment. Vous Ãªtes maintenant au point, bonne chance !')
+    if askyesno('Aide : Comment gagner ?', "Vous n'arrivez pas à gagner au jeu des bâtonnets ? Voulez-vous connaître l'astuce ?"):
+        if askyesno('Aide : Comment gagner ?', "Le principe est très simple, pour gagner vous devez vous assurer de prendre l'avant dernier bâtonnet. Mais pour cela vous devez contrôler la partie. Voulez-vous savoir comment faire ?"):
+            if askyesno('Aide : Comment gagner ?', "Comme l'on peut tirer 1 à 3 bâtonnets, cela signifie que vous pouvez toujours compléter le tirage de l'adversaire pour arriver à  4. Ainsi le but est d'aller de 4 en 4 jusqu'à l'avant dernier bâtonnet. Avez-vous besoin d'un exemple ?"):
+                 showwarning('Aide : Comment gagner ?', "Prenons l'exemple d'une partie courte à 15 bâtonnets. En suivant le raisonemment précédent, vous devez pour gagner, obtenir le 14ème bâtonnet. Or pour l'atteindre vous devez aller de 4 en 4 et donc tenter de vous emparer des bâtonnets 2, 6 ou 10. Une fois ceci fait, il suffit de compléter le tirage de l'adversaire comme vu précédemment. Vous êtes maintenant au point, bonne chance !")
 
 menu = Tk()
 menu.title('Le jeu des bâtonnets')
@@ -157,7 +167,9 @@ appliquer = Button(menu, text="Appliquer", command=name)
 choix = IntVar()
 bouton1 = Radiobutton(menu, text="Joueur 1", variable=choix, value=1, command=callback, bg="white")
 bouton2 = Radiobutton(menu, text="Joueur 2", variable=choix, value=2, command=callback, bg="white")
-bouton3 = Radiobutton(menu, text="AlÃ©atoire", variable=choix, value=3, command=callback, bg="white")
+bouton3 = Radiobutton(menu, text="Aléatoire", variable=choix, value=3, command=callback, bg="white")
+Nom = Entry(menu, bg="dodger blue")
+Nom2 = Entry(menu, bg="firebrick1")
 
 ordre = Button(menu, text="Lancer", command=ordre)
 quiCommence = Label(menu, text="Qui commence ?", bg="white")
