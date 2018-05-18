@@ -4,6 +4,9 @@ from tkinter import *
 from tkinter.messagebox import *
 import random
 
+stock2 = 55
+stock1 = 50
+taille = 30
 difficulty = 0
 callbackVar = 0
 Nom = 'Joueur 1'
@@ -90,6 +93,7 @@ def Fsoft():
     menu.geometry("1000x500")
     menu['bg']='lightgray'
     difficulty = 1
+    Fpattern()
 
 def Fnormal():
     global soft, normal, hard, impossible, difficulty
@@ -160,6 +164,8 @@ def Fretour():
     try :
         bouton2.destroy()
     except NameError:
+        pass
+    try :
         bouton3.destroy()
     except NameError:
         pass
@@ -189,6 +195,38 @@ def Fcallback():
         ordre = Button(menu, text="Lancer", command=Fordre)
         ordre.place(relx=0.5, rely=0.6, anchor=CENTER)
         callbackVar = 1
+
+
+
+
+
+def Fpattern():
+    global taille, stock1, stock2
+    for i in range(0, taille):
+        photoPattern = PhotoImage(file='Pattern1.pgm')
+        labelPattern = Label(image=photoPattern)
+        labelPattern.image = photoPattern
+        labelPattern.place(x=stock1, rely=0.5, anchor=CENTER)
+        photoBaton = PhotoImage(file='Batonnet.pgm')
+        labelBaton = Label(image=photoBaton)
+        labelBaton.image = photoBaton
+        labelBaton.place(x=stock2, rely=0.5, anchor=CENTER)
+        stock1 = stock1 +29
+        stock2 = stock2 +29
+    stock1 = stock1 - 10
+    photoPattern2 = PhotoImage(file='Pattern2.pgm')
+    labelPattern2 = Label(image=photoPattern2)
+    labelPattern2.image = photoPattern2
+    labelPattern2.place(x=stock1, rely=0.5, anchor=CENTER)
+    stock1 = 50
+    stock2 = 55
+
+
+
+
+
+
+
 
 def Faide():
     if askyesno('Aide : Comment gagner ?', "Vous n'arrivez pas à gagner au jeu des bâtonnets ? Voulez-vous connaître l'astuce ?"):
