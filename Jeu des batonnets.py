@@ -63,13 +63,13 @@ def Fordre():
     bouton3.destroy()
     quiCommence.destroy()
     if choix.get() == 1:
-       menu.geometry("1000x500")
+       menu.geometry("1100x500")
        print(j1)
        print(j2)
     elif choix.get() == 2:
-        menu.geometry("1000x500")
+        menu.geometry("1100x500")
     else :
-        menu.geometry("1000x500")
+        menu.geometry("1100x500")
 
 def Fjvo():
     global jvo, jvj, soft, normal, hard, impossible
@@ -85,50 +85,31 @@ def Fjvo():
     impossible.place(relx=0.5, rely=0.65, anchor=CENTER)
 
 def Fsoft():
-    global soft, normal, hard, impossible, difficulty
-    soft.destroy()
-    normal.destroy()
-    hard.destroy()
-    impossible.destroy()
-    menu.geometry("1000x500")
-    menu['bg']='lightgray'
+    global difficulty
     difficulty = 1
     Fpattern()
 
 def Fnormal():
-    global soft, normal, hard, impossible, difficulty
-    soft.destroy()
-    normal.destroy()
-    hard.destroy()
-    impossible.destroy()
-    menu.geometry("1000x500")
-    menu['bg']='lightgray'
+    global difficulty
     difficulty = 2
+    Fpattern()
 
 def Fhard():
-    global soft, normal, hard, impossible, difficulty
-    soft.destroy()
-    normal.destroy()
-    hard.destroy()
-    impossible.destroy()
-    menu.geometry("1000x500")
-    menu['bg']='lightgray'
+    global difficulty
     difficulty = 3
+    Fpattern()
 
 def Fimpossible():
-    global soft, normal, hard, impossible, difficulty
-    soft.destroy()
-    normal.destroy()
-    hard.destroy()
-    impossible.destroy()
-    menu.geometry("1000x500")
-    menu['bg']='lightgray'
+    global difficulty
     difficulty = 4
+    Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton
     callbackVar = 0
     difficulty = 0
+    scaleBaton.place_forget()
+    scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
     try :
         soft.destroy()
     except NameError:
@@ -171,11 +152,11 @@ def Fretour():
         pass
     try :
         Nom.destroy()
-    except NameError:
+    except (NameError, AttributeError):
         pass
     try :
         Nom2.destroy()
-    except NameError:
+    except (NameError, AttributeError):
         pass
     try :
         appliquer.destroy()
@@ -201,7 +182,32 @@ def Fcallback():
 
 
 def Fpattern():
-    global taille, stock1, stock2
+    global soft, normal, hard, impossible, difficulty, taille, stock1, stock2, scaleVar, scaleBaton
+    scaleBaton.place_forget()
+    soft.destroy()
+    normal.destroy()
+    hard.destroy()
+    impossible.destroy()
+    menu.geometry("1100x500")
+    menu['bg']='lightgray'
+    taille = scaleVar.get()
+    if taille == 35 :
+        stock1 = 50
+        stock2 = 55
+    elif taille == 30 :
+        stock1 = 122
+        stock2 = 127
+    elif taille == 25 :
+        stock1 = 195
+        stock2 = 200
+    elif taille == 20 :
+        stock1 = 267
+        stock2 = 272
+    else :
+        stock1 = 340
+        stock2 = 345
+
+
     for i in range(0, taille):
         photoPattern = PhotoImage(file='Pattern1.pgm')
         labelPattern = Label(image=photoPattern)
@@ -218,12 +224,6 @@ def Fpattern():
     labelPattern2 = Label(image=photoPattern2)
     labelPattern2.image = photoPattern2
     labelPattern2.place(x=stock1, rely=0.5, anchor=CENTER)
-    stock1 = 50
-    stock2 = 55
-
-
-
-
 
 
 
@@ -254,6 +254,10 @@ menubar.add_cascade(label="Fichier", menu=menu1)
 
 go = Button(menu, text='Lancer la partie', command=Fjouer)
 go.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+scaleVar = IntVar()
+scaleBaton = Scale(menu, from_=15, to=35, resolution=5, variable=scaleVar, orient=HORIZONTAL, background='white')
+scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
 
 
 
