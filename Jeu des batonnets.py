@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter.messagebox import *
 import random
 
-stock2 = 55
+first = 1
 taille = 30
 difficulty = 0
 callbackVar = 0
@@ -38,7 +38,7 @@ def Fjvj():
 def Fname():
     global j1, j2, appliquer, Nom, Nom2, quiCommence, choix, bouton1, bouton2, bouton3
     quiCommence = Label(menu, text="Qui commence ?", bg="white")
-    quiCommence.place(relx=0.5, rely=0.1, anchor=CENTER)
+    quiCommence.place(relx=0.5, rely=0.25, anchor=CENTER)
     j1 = Nom.get()
     j2 = Nom2.get()
     Nom.destroy()
@@ -48,12 +48,12 @@ def Fname():
     bouton1 = Radiobutton(menu, text=j1, variable=choix, value=1, command=Fcallback, bg="white")
     bouton2 = Radiobutton(menu, text=j2, variable=choix, value=2, command=Fcallback, bg="white")
     bouton3 = Radiobutton(menu, text="Aléatoire", variable=choix, value=3, command=Fcallback, bg="white")
-    bouton1.place(relx=0.5, rely=0.15, anchor=CENTER)
-    bouton2.place(relx=0.5, rely=0.25, anchor=CENTER)
-    bouton3.place(relx=0.5, rely=0.35, anchor=CENTER)
+    bouton1.place(relx=0.5, rely=0.30, anchor=CENTER)
+    bouton2.place(relx=0.5, rely=0.40, anchor=CENTER)
+    bouton3.place(relx=0.5, rely=0.50, anchor=CENTER)
 
 def Fordre():
-    global j1, j2, callbackVar, bouton1, bouton2, bouton3, quiCommence
+    global j1, j2, callbackVar, bouton1, bouton2, bouton3, quiCommence, first
     callbackVar = 0
     menu['bg']='lightgray'
     ordre.place_forget()
@@ -62,13 +62,15 @@ def Fordre():
     bouton3.destroy()
     quiCommence.destroy()
     if choix.get() == 1:
-       menu.geometry("1100x500")
-       print(j1)
-       print(j2)
+        first = 1
+        Fpattern()
     elif choix.get() == 2:
-        menu.geometry("1100x500")
+        first = 2
+        Fpattern()
     else :
-        menu.geometry("1100x500")
+        first = random.randint(1,2)
+        print(first)
+        Fpattern()
 
 def Fjvo():
     global jvo, jvj, soft, normal, hard, impossible
@@ -183,7 +185,7 @@ def Fcallback():
     global callbackVar, ordre
     if callbackVar == 0:
         ordre = Button(menu, text="Lancer", command=Fordre)
-        ordre.place(relx=0.5, rely=0.6, anchor=CENTER)
+        ordre.place(relx=0.5, rely=0.7, anchor=CENTER)
         callbackVar = 1
 
 
@@ -193,10 +195,22 @@ def Fcallback():
 def Fpattern():
     global soft, normal, hard, impossible, difficulty, taille, stock1, scaleVar, scaleBaton, labelBaton, labelPattern
     scaleBaton.place_forget()
-    soft.destroy()
-    normal.destroy()
-    hard.destroy()
-    impossible.destroy()
+    try :
+        soft.destroy()
+    except NameError:
+        pass
+    try :
+        normal.destroy()
+    except NameError:
+        pass
+    try :
+        hard.destroy()
+    except NameError:
+        pass
+    try :
+        impossible.destroy()
+    except NameError:
+        pass
     menu.geometry("1100x500")
     menu['bg']='lightgray'
     taille = scaleVar.get()
