@@ -2,17 +2,19 @@
 
 from tkinter import *
 from tkinter.messagebox import *
-import random
+import random, time
+from threading import Timer
 
+compteur = 0
 first = 1
-taille = 30
+taille = 15
 difficulty = 0
 callbackVar = 0
 Nom = 'Joueur 1'
 Nom2 = 'Joueur 2'
 j1 = 'Joueur 1'
 j2 = 'Joueur 2'
-
+LBatonnets = []
 
 def Fjouer():
     global jvo, jvj
@@ -106,7 +108,7 @@ def Fimpossible():
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
@@ -176,10 +178,17 @@ def Fretour():
     except NameError:
         pass
 
+    for i in range(0, taille) :
+        try :
+            LBatonnets[i].destroy()
+        except (NameError, IndexError) :
+            pass
+
+    LBatonnets[:] = []
+
     go.place(relx=0.5, rely=0.5, anchor=CENTER)
     menu.geometry("500x500")
     menu['bg']='white'
-
 
 def Fcallback():
     global callbackVar, ordre
@@ -216,18 +225,38 @@ def Fpattern():
     taille = scaleVar.get()
     if taille == 35 :
         photoPattern = PhotoImage(file='Pattern35.pgm')
+        stock1 = 58
     elif taille == 30 :
         photoPattern = PhotoImage(file='Pattern30.pgm')
+        stock1 = 130
     elif taille == 25 :
         photoPattern = PhotoImage(file='Pattern25.pgm')
+        stock1 = 203
     elif taille == 20 :
         photoPattern = PhotoImage(file='Pattern20.pgm')
+        stock1 = 275
     else :
         photoPattern = PhotoImage(file='Pattern15.pgm')
+        stock1 = 348
 
     labelPattern = Label(image=photoPattern)
     labelPattern.image = photoPattern
     labelPattern.place(relx=0.5, rely=0.5, anchor=CENTER)
+    menu.after(1500, Fbatonnets)
+
+def Fbatonnets():
+    global LBatonnets, compteur, taille, stock1
+    compteur = compteur +1
+    photoBatonnet = PhotoImage(file='Batonnet.pgm')
+    labelBatonnet = Label(image=photoBatonnet)
+    labelBatonnet.image = photoBatonnet
+    labelBatonnet.place(x=stock1, rely=0.5, anchor=CENTER)
+    LBatonnets.append(labelBatonnet)
+    stock1 = stock1 +29
+    if compteur == taille:
+        compteur = 0
+    else :
+        menu.after(50, Fbatonnets)
 
 
 
