@@ -5,7 +5,6 @@ from tkinter.messagebox import *
 import random
 
 stock2 = 55
-stock1 = 50
 taille = 30
 difficulty = 0
 callbackVar = 0
@@ -105,7 +104,7 @@ def Fimpossible():
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
@@ -166,9 +165,19 @@ def Fretour():
         quiCommence.destroy()
     except NameError:
         pass
+    try :
+        labelPattern.destroy()
+    except NameError:
+        pass
+    try :
+        photoPattern.destroy()
+    except NameError:
+        pass
+
     go.place(relx=0.5, rely=0.5, anchor=CENTER)
     menu.geometry("500x500")
     menu['bg']='white'
+
 
 def Fcallback():
     global callbackVar, ordre
@@ -182,7 +191,7 @@ def Fcallback():
 
 
 def Fpattern():
-    global soft, normal, hard, impossible, difficulty, taille, stock1, stock2, scaleVar, scaleBaton
+    global soft, normal, hard, impossible, difficulty, taille, stock1, scaleVar, scaleBaton, labelBaton, labelPattern
     scaleBaton.place_forget()
     soft.destroy()
     normal.destroy()
@@ -192,39 +201,29 @@ def Fpattern():
     menu['bg']='lightgray'
     taille = scaleVar.get()
     if taille == 35 :
-        stock1 = 50
-        stock2 = 55
+        photoPattern = PhotoImage(file='Pattern35.pgm')
     elif taille == 30 :
-        stock1 = 122
-        stock2 = 127
+        photoPattern = PhotoImage(file='Pattern30.pgm')
     elif taille == 25 :
-        stock1 = 195
-        stock2 = 200
+        photoPattern = PhotoImage(file='Pattern25.pgm')
     elif taille == 20 :
-        stock1 = 267
-        stock2 = 272
+        photoPattern = PhotoImage(file='Pattern20.pgm')
     else :
-        stock1 = 340
-        stock2 = 345
+        photoPattern = PhotoImage(file='Pattern15.pgm')
+
+    labelPattern = Label(image=photoPattern)
+    labelPattern.image = photoPattern
+    labelPattern.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 
-    for i in range(0, taille):
-        photoPattern = PhotoImage(file='Pattern1.pgm')
-        labelPattern = Label(image=photoPattern)
-        labelPattern.image = photoPattern
-        labelPattern.place(x=stock1, rely=0.5, anchor=CENTER)
-        photoBaton = PhotoImage(file='Batonnet.pgm')
-        labelBaton = Label(image=photoBaton)
-        labelBaton.image = photoBaton
-        labelBaton.place(x=stock2, rely=0.5, anchor=CENTER)
-        stock1 = stock1 +29
-        stock2 = stock2 +29
-    stock1 = stock1 - 10
-    photoPattern2 = PhotoImage(file='Pattern2.pgm')
-    labelPattern2 = Label(image=photoPattern2)
-    labelPattern2.image = photoPattern2
-    labelPattern2.place(x=stock1, rely=0.5, anchor=CENTER)
 
+def Fposition():
+    posX = menu.winfo_pointerx()
+    posY = menu.winfo_pointery()
+    if 340 < posX < 369 and 250 < posY < 350 :
+        print("c'est bon")
+    else :
+        Fposition()
 
 
 
@@ -258,7 +257,6 @@ go.place(relx=0.5, rely=0.5, anchor=CENTER)
 scaleVar = IntVar()
 scaleBaton = Scale(menu, from_=15, to=35, resolution=5, variable=scaleVar, orient=HORIZONTAL, background='white')
 scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
-
 
 
 menu.config(menu=menubar)
