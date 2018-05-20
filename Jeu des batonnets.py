@@ -108,11 +108,13 @@ def Fimpossible():
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, debutPartie, labelNbBaton
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
     scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
+    labelNbBaton.place_forget()
+    labelNbBaton.place(relx=0.5, rely=0.025, anchor=CENTER)
     try :
         soft.destroy()
     except NameError:
@@ -177,6 +179,10 @@ def Fretour():
         photoPattern.destroy()
     except NameError:
         pass
+    try :
+        debutPartie.destroy()
+    except NameError :
+        pass
 
     for i in range(0, taille) :
         try :
@@ -202,8 +208,9 @@ def Fcallback():
 
 
 def Fpattern():
-    global soft, normal, hard, impossible, difficulty, taille, stock1, scaleVar, scaleBaton, labelBaton, labelPattern
+    global soft, normal, hard, impossible, difficulty, taille, stock1, scaleVar, scaleBaton, labelBaton, labelPattern, debutPartie, labelNbBaton
     scaleBaton.place_forget()
+    labelNbBaton.place_forget()
     try :
         soft.destroy()
     except NameError:
@@ -243,9 +250,11 @@ def Fpattern():
     labelPattern.image = photoPattern
     labelPattern.place(relx=0.5, rely=0.5, anchor=CENTER)
     menu.after(1500, Fbatonnets)
+    debutPartie = Label(menu, text="Lancement de la partie...", font=("Helvetica", 20))
+    debutPartie.place(relx=0.5, rely=0.2, anchor=CENTER)
 
 def Fbatonnets():
-    global LBatonnets, compteur, taille, stock1
+    global LBatonnets, compteur, taille, stock1, debutPartie
     compteur = compteur +1
     photoBatonnet = PhotoImage(file='Batonnet.pgm')
     labelBatonnet = Label(image=photoBatonnet)
@@ -255,20 +264,48 @@ def Fbatonnets():
     stock1 = stock1 +29
     if compteur == taille:
         compteur = 0
+        try :
+            debutPartie.destroy()
+        except NameError :
+            pass
+        Fposition()
     else :
         menu.after(50, Fbatonnets)
 
 
 
 def Fposition():
-    posX = menu.winfo_pointerx()
-    posY = menu.winfo_pointery()
-    if 340 < posX < 369 and 250 < posY < 350 :
-        print("c'est bon")
-    else :
-        Fposition()
+    global compteurBatonsPartie, LBatonnets, taille
+    compteurBatonsPartie2 = compteurBatonsPartie
+    LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic1)
+    if taille-compteurBatonsPartie2 != 0 :
+        compteurBatonsPartie2 = compteurBatonsPartie2 +1
+        LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic2)
+        if taille-compteurBatonsPartie2 != 0 :
+            compteurBatonsPartie2 = compteurBatonsPartie2 +1
+            LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic3)
+        else : pass
+    else : pass
 
 
+def Fclic1(event):
+    global compteurBatonsPartie, LBatonnets
+    LBatonnets[compteurBatonsPartie].place_forget()
+    compteurBatonsPartie = compteurBatonsPartie +1
+def Fclic2(event):
+    global compteurBatonsPartie, LBatonnets
+    LBatonnets[compteurBatonsPartie].place_forget()
+    compteurBatonsPartie = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].place_forget()
+    compteurBatonsPartie = compteurBatonsPartie +1
+def Fclic3(event):
+    global compteurBatonsPartie, LBatonnets
+    LBatonnets[compteurBatonsPartie].place_forget()
+    compteurBatonsPartie = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].place_forget()
+    compteurBatonsPartie = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].place_forget()
+    compteurBatonsPartie = compteurBatonsPartie +1
 
 def Faide():
     if askyesno('Aide : Comment gagner ?', "Vous n'arrivez pas à gagner au jeu des bâtonnets ? Voulez-vous connaître l'astuce ?"):
@@ -300,7 +337,8 @@ go.place(relx=0.5, rely=0.5, anchor=CENTER)
 scaleVar = IntVar()
 scaleBaton = Scale(menu, from_=15, to=35, resolution=5, variable=scaleVar, orient=HORIZONTAL, background='white')
 scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
-
+labelNbBaton = Label(menu, text="Nombre de bâtonnets :", background='white')
+labelNbBaton.place(relx=0.5, rely=0.025, anchor=CENTER)
 
 menu.config(menu=menubar)
 menu.mainloop()
