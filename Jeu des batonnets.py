@@ -5,6 +5,7 @@ from tkinter.messagebox import *
 import random, time
 from threading import Timer
 
+compteurBatonsPartie = 0
 compteur = 0
 first = 1
 taille = 15
@@ -275,37 +276,64 @@ def Fbatonnets():
 
 
 def Fposition():
-    global compteurBatonsPartie, LBatonnets, taille
-    compteurBatonsPartie2 = compteurBatonsPartie
-    LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic1)
+    global compteurBatonsPartie, LBatonnets, taille, compteurBatonsPartie2
+    compteurBatonsPartie2 = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].bind("<1>", Fclic1)
     if taille-compteurBatonsPartie2 != 0 :
-        compteurBatonsPartie2 = compteurBatonsPartie2 +1
         LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic2)
+        compteurBatonsPartie2 = compteurBatonsPartie2 +1
         if taille-compteurBatonsPartie2 != 0 :
-            compteurBatonsPartie2 = compteurBatonsPartie2 +1
             LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic3)
         else : pass
     else : pass
 
 
 def Fclic1(event):
-    global compteurBatonsPartie, LBatonnets
+    global compteurBatonsPartie, LBatonnets, taille
+    LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
+    if taille-compteurBatonsPartie != 0 :
+        LBatonnets[compteurBatonsPartie].unbind("<1>")
+        stock = compteurBatonsPartie + 1
+        if taille-stock != 0 :
+            LBatonnets[stock].unbind("<1>")
+        else : pass
+        Fposition()
+    else : Fwinner()
+
 def Fclic2(event):
-    global compteurBatonsPartie, LBatonnets
+    global compteurBatonsPartie, LBatonnets, taille
+    LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
+    if taille-compteurBatonsPartie != 0 :
+        LBatonnets[compteurBatonsPartie].unbind("<1>")
+        Fposition()
+    else : Fwinner()
+
 def Fclic3(event):
-    global compteurBatonsPartie, LBatonnets
+    global compteurBatonsPartie, LBatonnets, taille
+    LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
+    if taille-compteurBatonsPartie == 0 :
+        Fwinner()
+    else : Fposition()
+
+
+def Fwinner():
+    print("gg lol")
+
 
 def Faide():
     if askyesno('Aide : Comment gagner ?', "Vous n'arrivez pas à gagner au jeu des bâtonnets ? Voulez-vous connaître l'astuce ?"):
