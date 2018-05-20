@@ -5,6 +5,7 @@ from tkinter.messagebox import *
 import random, time
 from threading import Timer
 
+tours = 0
 compteurBatonsPartie = 0
 compteur = 0
 first = 1
@@ -56,7 +57,7 @@ def Fname():
     bouton3.place(relx=0.5, rely=0.50, anchor=CENTER)
 
 def Fordre():
-    global j1, j2, callbackVar, bouton1, bouton2, bouton3, quiCommence, first
+    global j1, j2, callbackVar, bouton1, bouton2, bouton3, quiCommence, first, difficulty
     callbackVar = 0
     menu['bg']='lightgray'
     ordre.place_forget()
@@ -65,14 +66,13 @@ def Fordre():
     bouton3.destroy()
     quiCommence.destroy()
     if choix.get() == 1:
-        first = 1
+        difficulty = 0
         Fpattern()
     elif choix.get() == 2:
-        first = 2
+        difficulty = 1
         Fpattern()
     else :
-        first = random.randint(1,2)
-        print(first)
+        difficulty = random.randint(0,1)
         Fpattern()
 
 def Fjvo():
@@ -90,26 +90,26 @@ def Fjvo():
 
 def Fsoft():
     global difficulty
-    difficulty = 1
+    difficulty = 2
     Fpattern()
 
 def Fnormal():
     global difficulty
-    difficulty = 2
+    difficulty = 3
     Fpattern()
 
 def Fhard():
     global difficulty
-    difficulty = 3
+    difficulty = 4
     Fpattern()
 
 def Fimpossible():
     global difficulty
-    difficulty = 4
+    difficulty = 5
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, debutPartie, labelNbBaton
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, debutPartie, labelNbBaton, compteurBatonsPartie
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
@@ -184,6 +184,18 @@ def Fretour():
         debutPartie.destroy()
     except NameError :
         pass
+    try :
+        finPartie.destroy()
+    except NameError:
+        pass
+    try :
+        relancer.destroy()
+    except NameError :
+        pass
+    try :
+        arretPartie.destroy()
+    except NameError:
+        pass
 
     for i in range(0, taille) :
         try :
@@ -192,6 +204,7 @@ def Fretour():
             pass
 
     LBatonnets[:] = []
+    compteurBatonsPartie = 0
 
     go.place(relx=0.5, rely=0.5, anchor=CENTER)
     menu.geometry("500x500")
@@ -289,7 +302,8 @@ def Fposition():
 
 
 def Fclic1(event):
-    global compteurBatonsPartie, LBatonnets, taille
+    global compteurBatonsPartie, LBatonnets, taille, tours
+    tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
@@ -303,7 +317,8 @@ def Fclic1(event):
     else : Fwinner()
 
 def Fclic2(event):
-    global compteurBatonsPartie, LBatonnets, taille
+    global compteurBatonsPartie, LBatonnets, taille, tours
+    tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
@@ -316,7 +331,8 @@ def Fclic2(event):
     else : Fwinner()
 
 def Fclic3(event):
-    global compteurBatonsPartie, LBatonnets, taille
+    global compteurBatonsPartie, LBatonnets, taille, tours
+    tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
@@ -332,7 +348,46 @@ def Fclic3(event):
 
 
 def Fwinner():
-    print("gg lol")
+    global difficulty, tours, j1, j2, finPartie, arretPartie, relancer, compteurBatonsPartie
+    compteurBatonsPartie = 0
+    try :
+        labelPattern.destroy()
+    except NameError:
+        pass
+    try :
+        photoPattern.destroy()
+    except NameError:
+        pass
+    for i in range(0, taille) :
+        try :
+            LBatonnets[i].destroy()
+        except (NameError, IndexError) :
+            pass
+    if difficulty == 0 :
+        if tours % 2 == 0 : winner = 1
+        else : winner = 2
+    elif difficulty == 1 :
+        if tours % 2 == 0 : winner = 2
+        else : winner = 1
+    if winner == 1 :
+        finPartie = Label(menu, text=j1 + " a gagné cette partie !", font=("Helvetica", 40))
+        finPartie.place(relx=0.5, rely=0.5, anchor=CENTER)
+    elif winner == 2 :
+        finPartie = Label(menu, text=j2 + " a gagné cette partie !", font=("Helvetica", 40))
+        finPartie.place(relx=0.5, rely=0.5, anchor=CENTER)
+    relancer = Button(menu, text="Relancer avec les mêmes paramètres", command=Frelancer)
+    relancer.place(relx=0.5, rely=0.8, anchor=CENTER)
+    arretPartie = Button(menu, text="Retourner au menu principal", command=Fretour)
+    arretPartie.place(relx=0.5, rely=0.9, anchor=CENTER)
+
+def Frelancer():
+    global arretPartie, relancer, finPartie
+    arretPartie.destroy()
+    relancer.destroy()
+    finPartie.destroy()
+    LBatonnets[:] = []
+    compteurBatonsPartie = 0
+    Fpattern()
 
 
 def Faide():
