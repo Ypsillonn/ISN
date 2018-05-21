@@ -109,7 +109,7 @@ def Fimpossible():
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, debutPartie, labelNbBaton, compteurBatonsPartie
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, debutPartie, labelNbBaton, compteurBatonsPartie, commence, aQuiLeTour
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
@@ -196,6 +196,14 @@ def Fretour():
         arretPartie.destroy()
     except NameError:
         pass
+    try :
+        commence.destroy()
+    except NameError:
+        pass
+    try :
+        aQuiLeTour.destroy()
+    except NameError:
+        pass
 
     for i in range(0, taille) :
         try :
@@ -216,8 +224,6 @@ def Fcallback():
         ordre = Button(menu, text="Lancer", command=Fordre)
         ordre.place(relx=0.5, rely=0.7, anchor=CENTER)
         callbackVar = 1
-
-
 
 
 
@@ -267,6 +273,7 @@ def Fpattern():
     debutPartie = Label(menu, text="Lancement de la partie...", font=("Helvetica", 20))
     debutPartie.place(relx=0.5, rely=0.2, anchor=CENTER)
 
+
 def Fbatonnets():
     global LBatonnets, compteur, taille, stock1, debutPartie
     compteur = compteur +1
@@ -289,7 +296,7 @@ def Fbatonnets():
 
 
 def Fposition():
-    global compteurBatonsPartie, LBatonnets, taille, compteurBatonsPartie2
+    global compteurBatonsPartie, LBatonnets, taille, compteurBatonsPartie2, difficulty, commence, tours, aQuiLeTour
     compteurBatonsPartie2 = compteurBatonsPartie +1
     LBatonnets[compteurBatonsPartie].bind("<1>", Fclic1)
     if taille-compteurBatonsPartie2 != 0 :
@@ -299,10 +306,33 @@ def Fposition():
             LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic3)
         else : pass
     else : pass
+    if compteurBatonsPartie == 0 :
+        if difficulty == 0 :
+            commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+        elif difficulty == 1 :
+            commence = Label(menu, text=j2 + " commence !", font=("Helvetica", 10))
+        commence.place(relx=0.5, rely=0.2, anchor=CENTER)
+
+    elif tours % 2 == 0 :
+        if difficulty == 0 :
+            aQuiLeTour = Label(menu, text= "C'est à " + j1 +  " de jouer !", font=("Helvetica", 10))
+        elif difficulty == 1 :
+            aQuiLeTour = Label(menu, text= "C'est à " + j2 +  " de jouer !", font=("Helvetica", 10))
+        aQuiLeTour.place(relx=0.5, rely=0.2, anchor=CENTER)
+
+    elif tours % 2 == 1 :
+        if difficulty == 0 :
+            aQuiLeTour = Label(menu, text= "C'est à " + j2 +  " de jouer !", font=("Helvetica", 10))
+        elif difficulty == 1 :
+            aQuiLeTour = Label(menu, text= "C'est à " + j1 +  " de jouer !", font=("Helvetica", 10))
+        aQuiLeTour.place(relx=0.5, rely=0.2, anchor=CENTER)
+
 
 
 def Fclic1(event):
-    global compteurBatonsPartie, LBatonnets, taille, tours
+    global compteurBatonsPartie, LBatonnets, taille, tours, commence, aQuiLeTour
+    if tours == 0 : commence.destroy()
+    else : aQuiLeTour.destroy()
     tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
@@ -318,6 +348,8 @@ def Fclic1(event):
 
 def Fclic2(event):
     global compteurBatonsPartie, LBatonnets, taille, tours
+    if tours == 0 : commence.destroy()
+    else : aQuiLeTour.destroy()
     tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
@@ -332,6 +364,8 @@ def Fclic2(event):
 
 def Fclic3(event):
     global compteurBatonsPartie, LBatonnets, taille, tours
+    if tours == 0 : commence.destroy()
+    else : aQuiLeTour.destroy()
     tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
