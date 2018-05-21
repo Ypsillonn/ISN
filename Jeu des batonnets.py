@@ -2,8 +2,7 @@
 
 from tkinter import *
 from tkinter.messagebox import *
-import random, time
-from threading import Timer
+import random
 
 tours = 0
 compteurBatonsPartie = 0
@@ -17,6 +16,14 @@ Nom2 = 'Joueur 2'
 j1 = 'Joueur 1'
 j2 = 'Joueur 2'
 LBatonnets = []
+LDifficulty = ["rien", "rien", "facile", "normal", "difficile", "impossible"]
+L15 = [2, 6, 10, 14]
+L20 = [3, 7, 11, 15, 19]
+L25 = [4, 8, 12, 16, 20, 24]
+L30 = [1, 5, 9, 13, 17, 21, 25, 29]
+L35 = [2, 6, 10, 14, 18, 22, 26, 30, 34]
+
+
 
 def Fjouer():
     global jvo, jvj
@@ -87,6 +94,7 @@ def Fjvo():
     normal.place(relx=0.5, rely=0.45, anchor=CENTER)
     hard.place(relx=0.5, rely=0.55, anchor=CENTER)
     impossible.place(relx=0.5, rely=0.65, anchor=CENTER)
+
 
 def Fsoft():
     global difficulty
@@ -228,7 +236,7 @@ def Fcallback():
 
 
 def Fpattern():
-    global soft, normal, hard, impossible, difficulty, taille, stock1, scaleVar, scaleBaton, labelBaton, labelPattern, debutPartie, labelNbBaton
+    global soft, normal, hard, impossible, difficulty, taille, stock1, scaleVar, scaleBaton, labelBaton, labelPattern, debutPartie, labelNbBaton, tourJOUEUR
     scaleBaton.place_forget()
     labelNbBaton.place_forget()
     try :
@@ -265,7 +273,7 @@ def Fpattern():
     else :
         photoPattern = PhotoImage(file='Pattern15.pgm')
         stock1 = 348
-
+    tourJOUEUR = True
     labelPattern = Label(image=photoPattern)
     labelPattern.image = photoPattern
     labelPattern.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -275,7 +283,7 @@ def Fpattern():
 
 
 def Fbatonnets():
-    global LBatonnets, compteur, taille, stock1, debutPartie
+    global LBatonnets, compteur, taille, stock1, debutPartie, difficulty
     compteur = compteur +1
     photoBatonnet = PhotoImage(file='Batonnet.pgm')
     labelBatonnet = Label(image=photoBatonnet)
@@ -289,7 +297,10 @@ def Fbatonnets():
             debutPartie.destroy()
         except NameError :
             pass
-        Fposition()
+        if difficulty < 2 :
+            Fposition()
+        else :
+            FaQuiLeTourJVO()
     else :
         menu.after(50, Fbatonnets)
 
@@ -330,7 +341,7 @@ def Fposition():
 
 
 def Fclic1(event):
-    global compteurBatonsPartie, LBatonnets, taille, tours, commence, aQuiLeTour
+    global compteurBatonsPartie, LBatonnets, taille, tours, commence, aQuiLeTour, difficulty, tourJOUEUR, winner
     if tours == 0 : commence.destroy()
     else : aQuiLeTour.destroy()
     tours = tours +1
@@ -343,11 +354,20 @@ def Fclic1(event):
         if taille-stock != 0 :
             LBatonnets[stock].unbind("<1>")
         else : pass
-        Fposition()
-    else : Fwinner()
+        if difficulty < 2 :
+            Fposition()
+        else :
+            tourJOUEUR = False
+            FaQuiLeTourJVO()
+    else :
+        if difficulty > 1 :
+            winner = 3
+        else :
+            pass
+        menu.after(500, Fwinner)
 
 def Fclic2(event):
-    global compteurBatonsPartie, LBatonnets, taille, tours
+    global compteurBatonsPartie, LBatonnets, taille, tours, commence, aQuiLeTour, difficulty, tourJOUEUR, winner
     if tours == 0 : commence.destroy()
     else : aQuiLeTour.destroy()
     tours = tours +1
@@ -359,13 +379,24 @@ def Fclic2(event):
     compteurBatonsPartie = compteurBatonsPartie +1
     if taille-compteurBatonsPartie != 0 :
         LBatonnets[compteurBatonsPartie].unbind("<1>")
-        Fposition()
-    else : Fwinner()
+        if difficulty < 2 :
+            Fposition()
+        else :
+            tourJOUEUR = False
+            FaQuiLeTourJVO()
+    else :
+        if difficulty > 1 :
+            winner = 3
+        else :
+            pass
+        menu.after(500, Fwinner)
 
 def Fclic3(event):
-    global compteurBatonsPartie, LBatonnets, taille, tours
-    if tours == 0 : commence.destroy()
-    else : aQuiLeTour.destroy()
+    global compteurBatonsPartie, LBatonnets, taille, tours, commence, aQuiLeTour, difficulty, tourJOUEUR, winner
+    if tours == 0 :
+        commence.destroy()
+    else :
+        aQuiLeTour.destroy()
     tours = tours +1
     LBatonnets[compteurBatonsPartie].unbind("<1>")
     LBatonnets[compteurBatonsPartie].place_forget()
@@ -377,12 +408,149 @@ def Fclic3(event):
     LBatonnets[compteurBatonsPartie].place_forget()
     compteurBatonsPartie = compteurBatonsPartie +1
     if taille-compteurBatonsPartie == 0 :
-        Fwinner()
-    else : Fposition()
+        if difficulty > 1 :
+            winner = 3
+        else :
+            pass
+        menu.after(500, Fwinner)
+    else :
+        if difficulty < 2 :
+            Fposition()
+        else :
+            tourJOUEUR = False
+            FaQuiLeTourJVO()
+
+
+def FpositionJVO():
+    global compteurBatonsPartie, LBatonnets, taille, compteurBatonsPartie2, difficulty, commence, tours, aQuiLeTour, tourJOUEUR
+    compteurBatonsPartie2 = compteurBatonsPartie +1
+    LBatonnets[compteurBatonsPartie].bind("<1>", Fclic1)
+    if taille-compteurBatonsPartie2 != 0 :
+        LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic2)
+        compteurBatonsPartie2 = compteurBatonsPartie2 +1
+        if taille-compteurBatonsPartie2 != 0 :
+            LBatonnets[compteurBatonsPartie2].bind("<1>", Fclic3)
+        else : pass
+    else : pass
+
+
+def FaQuiLeTourJVO():
+    global compteurBatonsPartie, commence, aQuiLeTour, difficulty, taille, tourJOUEUR
+    if compteurBatonsPartie == 0 :
+        if difficulty == 2 :
+            commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+        elif difficulty == 3 :
+            commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+        elif difficulty == 4 :
+            if taille == 25 : commence = Label(menu, text="L'ordinateur commence !", font=("Helvetica", 10))
+            else : commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+        elif difficulty == 5 :
+            if taille == 25 : commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+            else : commence = Label(menu, text="L'ordinateur commence !", font=("Helvetica", 10))
+        commence.place(relx=0.5, rely=0.2, anchor=CENTER)
+
+    elif tourJOUEUR == True :
+        aQuiLeTour = Label(menu, text= "C'est à " + j1 +  " de jouer !", font=("Helvetica", 10))
+        aQuiLeTour.place(relx=0.5, rely=0.2, anchor=CENTER)
+    else :
+        aQuiLeTour = Label(menu, text= "C'est à l'ordinateur de jouer !", font=("Helvetica", 10))
+        aQuiLeTour.place(relx=0.5, rely=0.2, anchor=CENTER)
+    if tourJOUEUR == True :
+        FpositionJVO()
+    else :
+        menu.after(1250, FalgoBot)
+
+
+
+
+def FalgoBot():
+    global difficulty, taille, compteurBatonsPartie, LBatonnets, winner, L15, L20, L25, L30, L35, tourJOUEUR, commence, aQuiLeTour, batonsAEnlever
+    if compteurBatonsPartie == 0 :
+        commence.destroy()
+    else :
+        aQuiLeTour.destroy()
+    if difficulty == 2 :
+
+        if taille - compteurBatonsPartie > 2 :
+            batonsAEnlever = random.randint(1,3)
+        elif taille - compteurBatonsPartie == 2 :
+            batonsAEnlever = random.randint(1,2)
+        else :
+            batonsAEnlever = 1
+
+    elif difficulty == 3 :
+        if taille - compteurBatonsPartie > 10 :
+            batonsAEnlever = random.randint(1,3)
+        elif taille - compteurBatonsPartie == 1 :
+            batonsAEnlever = 1
+        else :
+            for i in range(1, 4):
+                test = compteurBatonsPartie + i
+                if taille == 15 :
+                    if test in L15 :
+                        batonsAEnlever = i
+                        break
+                    elif i == 3 :
+                        batonsAEnlever = random.randint(1,3)
+                elif taille == 20 :
+                    if test in L20 :
+                        batonsAEnlever = i
+                        break
+                    elif i == 3 :
+                        batonsAEnlever = random.randint(1,3)
+                elif taille == 25 :
+                    if test in L25 :
+                        batonsAEnlever = i
+                        break
+                    elif i == 3 :
+                        batonsAEnlever = random.randint(1,3)
+                elif taille == 30 :
+                    if test in L30 :
+                        batonsAEnlever = i
+                        break
+                    elif i == 3 :
+                        batonsAEnlever = random.randint(1,3)
+                else :
+                    if test in L35 :
+                        batonsAEnlever = i
+                        break
+                    elif i == 3 :
+                        batonsAEnlever = random.randint(1,3)
+
+
+
+    elif difficulty == 4 :
+        if taille == 25 : commence = Label(menu, text="L'ordinateur commence !", font=("Helvetica", 10))
+        else : commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+
+    else :
+        if taille == 25 : commence = Label(menu, text=j1 + " commence !", font=("Helvetica", 10))
+        else : commence = Label(menu, text="L'ordinateur commence !", font=("Helvetica", 10))
+
+
+
+    for i in range (batonsAEnlever) :
+        LBatonnets[compteurBatonsPartie].place_forget()
+        compteurBatonsPartie = compteurBatonsPartie +1
+
+
+    if taille - compteurBatonsPartie == 0 :
+        winner = 1
+        menu.after(500, Fwinner)
+    else :
+        tourJOUEUR = True
+        FaQuiLeTourJVO()
+
+
+
+
+
+
+
 
 
 def Fwinner():
-    global difficulty, tours, j1, j2, finPartie, arretPartie, relancer, compteurBatonsPartie
+    global difficulty, tours, j1, j2, finPartie, arretPartie, relancer, compteurBatonsPartie, winner, LDifficulty
     compteurBatonsPartie = 0
     try :
         labelPattern.destroy()
@@ -403,24 +571,35 @@ def Fwinner():
     elif difficulty == 1 :
         if tours % 2 == 0 : winner = 2
         else : winner = 1
+    else :
+        pass
     if winner == 1 :
-        finPartie = Label(menu, text=j1 + " a gagné cette partie !", font=("Helvetica", 40))
-        finPartie.place(relx=0.5, rely=0.5, anchor=CENTER)
+        if difficulty < 2 :
+            finPartie = Label(menu, text=j1 + " a gagné cette partie !", font=("Helvetica", 40))
+        else :
+            nomDifficulty = LDifficulty[difficulty]
+            finPartie = Label(menu, text="Vous avez battu l'ordinateur en mode " + nomDifficulty + " !", font=("Helvetica", 40))
     elif winner == 2 :
         finPartie = Label(menu, text=j2 + " a gagné cette partie !", font=("Helvetica", 40))
-        finPartie.place(relx=0.5, rely=0.5, anchor=CENTER)
+    else :
+        nomDifficulty = LDifficulty[difficulty]
+        finPartie = Label(menu, text="L'ordinateur vous a battu en mode " + nomDifficulty + " !", font=("Helvetica", 40))
+    finPartie.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+
     relancer = Button(menu, text="Relancer avec les mêmes paramètres", command=Frelancer)
     relancer.place(relx=0.5, rely=0.8, anchor=CENTER)
     arretPartie = Button(menu, text="Retourner au menu principal", command=Fretour)
     arretPartie.place(relx=0.5, rely=0.9, anchor=CENTER)
 
 def Frelancer():
-    global arretPartie, relancer, finPartie
+    global arretPartie, relancer, finPartie, tours
     arretPartie.destroy()
     relancer.destroy()
     finPartie.destroy()
     LBatonnets[:] = []
     compteurBatonsPartie = 0
+    tours = 0
     Fpattern()
 
 
