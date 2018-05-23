@@ -35,25 +35,33 @@ def Fjouer():
     jvo.place(relx=0.5, rely=0.55, anchor=CENTER)
 
 def Fjvj():
-    global Nom, Nom2, j1, j2, jvo, jvj, appliquer
+    global Nom2, j2, jvo, jvj, appliquer
     jvj.destroy()
     jvo.destroy()
-    Nom = Entry(menu, bg="dodger blue")
-    Nom2 = Entry(menu, bg="firebrick1")
-    Nom.insert(END, 'Joueur 1')
+    Nom2 = Entry(menu)
     Nom2.insert(END, 'Joueur 2')
-    Nom.place(relx=0.5, rely=0.3, anchor=CENTER)
     Nom2.place(relx=0.5, rely=0.4, anchor=CENTER)
     appliquer = Button(menu, text="Appliquer", command=Fname)
     appliquer.place(relx=0.5, rely=0.6, anchor=CENTER)
 
+
+def Fnomj1():
+    global go, scaleBaton, j1, Nom, labelNbBaton, j1bouton, j1label
+
+    go.place(relx=0.5, rely=0.5, anchor=CENTER)
+    scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
+    labelNbBaton.place(relx=0.5, rely=0.025, anchor=CENTER)
+    j1 = Nom.get()
+    Nom.destroy()
+    j1bouton.destroy()
+    j1label.destroy()
+
+
 def Fname():
-    global j1, j2, appliquer, Nom, Nom2, quiCommence, choix, bouton1, bouton2, bouton3
+    global j2, appliquer, Nom2, quiCommence, choix, bouton1, bouton2, bouton3
     quiCommence = Label(menu, text="Qui commence ?", bg="white")
     quiCommence.place(relx=0.5, rely=0.25, anchor=CENTER)
-    j1 = Nom.get()
     j2 = Nom2.get()
-    Nom.destroy()
     Nom2.destroy()
     appliquer.destroy()
     choix = IntVar()
@@ -118,7 +126,7 @@ def Fimpossible():
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, LChiffres, debutPartie, labelNbBaton, compteurBatonsPartie, commence, aQuiLeTour
+    global callbackVar, jvo, jvj, j1bouton, j1label, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, LChiffres, debutPartie, labelNbBaton, compteurBatonsPartie, commence, aQuiLeTour
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
@@ -713,6 +721,7 @@ menu.geometry("500x500")
 menu.resizable(0, 0)
 menu['bg']='white'
 
+
 menubar = Menu(menu)
 menu1 = Menu(menubar, tearoff=0)
 menu1.add_command(label="Retour menu", command=Fretour)
@@ -722,16 +731,20 @@ menu1.add_separator()
 menu1.add_command(label="Quitter", command=menu.destroy)
 menubar.add_cascade(label="Fichier", menu=menu1)
 
+Nom = Entry(menu)
+Nom.insert(END, 'Joueur 1')
+Nom.place(relx=0.5, rely=0.3, anchor=CENTER)
+j1label = Label(menu, text="Défnir un nom pour le joueur 1", background='white')
+j1label.place(relx=0.5, rely=0.2, anchor=CENTER)
+j1bouton = Button(menu, text="Appliquer", command=Fnomj1)
+j1bouton.place(relx=0.5, rely=0.6, anchor=CENTER)
 
 
 go = Button(menu, text='Lancer la partie', command=Fjouer)
-go.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 scaleVar = IntVar()
 scaleBaton = Scale(menu, from_=15, to=35, resolution=5, variable=scaleVar, orient=HORIZONTAL, background='white')
-scaleBaton.place(relx=0.5, rely=0.1, anchor=CENTER)
 labelNbBaton = Label(menu, text="Nombre de bâtonnets :", background='white')
-labelNbBaton.place(relx=0.5, rely=0.025, anchor=CENTER)
 
 menu.config(menu=menubar)
 menu.mainloop()
