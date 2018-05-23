@@ -56,6 +56,16 @@ def Fnomj1():
     j1bouton.destroy()
     j1label.destroy()
 
+    menubar = Menu(menu)
+    menu1 = Menu(menubar, tearoff=0)
+    menu1.add_command(label="Retour menu", command=Fretour)
+    menu1.add_command(label="Règles", command=Fregles)
+    menu1.add_command(label="Aide", command=Faide)
+    menu1.add_separator()
+    menu1.add_command(label="Quitter", command=menu.destroy)
+    menubar.add_cascade(label="Fichier", menu=menu1)
+    menu.config(menu=menubar)
+
 
 def Fname():
     global j2, appliquer, Nom2, quiCommence, choix, bouton1, bouton2, bouton3
@@ -126,7 +136,7 @@ def Fimpossible():
     Fpattern()
 
 def Fretour():
-    global callbackVar, jvo, jvj, j1bouton, j1label, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, LChiffres, debutPartie, labelNbBaton, compteurBatonsPartie, commence, aQuiLeTour
+    global callbackVar, jvo, jvj, soft, normal, hard, impossible, difficulty, bouton1, bouton2, bouton3, quiCommence, appliquer, finPartie, arretPartie, relancer, Nom, Nom2, ordre, scaleBaton, labelBaton, labelPattern, taille, LBatonnets, LChiffres, debutPartie, labelNbBaton, compteurBatonsPartie, commence, aQuiLeTour
     callbackVar = 0
     difficulty = 0
     scaleBaton.place_forget()
@@ -137,7 +147,7 @@ def Fretour():
         soft.destroy()
     except NameError:
         pass
-    try :
+
         normal.destroy()
     except NameError:
         pass
@@ -722,15 +732,6 @@ menu.resizable(0, 0)
 menu['bg']='white'
 
 
-menubar = Menu(menu)
-menu1 = Menu(menubar, tearoff=0)
-menu1.add_command(label="Retour menu", command=Fretour)
-menu1.add_command(label="Règles", command=Fregles)
-menu1.add_command(label="Aide", command=Faide)
-menu1.add_separator()
-menu1.add_command(label="Quitter", command=menu.destroy)
-menubar.add_cascade(label="Fichier", menu=menu1)
-
 Nom = Entry(menu)
 Nom.insert(END, 'Joueur 1')
 Nom.place(relx=0.5, rely=0.3, anchor=CENTER)
@@ -746,5 +747,4 @@ scaleVar = IntVar()
 scaleBaton = Scale(menu, from_=15, to=35, resolution=5, variable=scaleVar, orient=HORIZONTAL, background='white')
 labelNbBaton = Label(menu, text="Nombre de bâtonnets :", background='white')
 
-menu.config(menu=menubar)
 menu.mainloop()
