@@ -700,8 +700,11 @@ def Faide():
     if askyesno('Aide : Comment gagner ?', "Vous n'arrivez pas à gagner au jeu des bâtonnets ? Voulez-vous connaître l'astuce ?"):
         if askyesno('Aide : Comment gagner ?', "Le principe est très simple, pour gagner vous devez vous assurer de prendre l'avant dernier bâtonnet. Mais pour cela vous devez contrôler la partie. Voulez-vous savoir comment faire ?"):
             if askyesno('Aide : Comment gagner ?', "Comme l'on peut tirer 1 à 3 bâtonnets, cela signifie que vous pouvez toujours compléter le tirage de l'adversaire pour arriver à  4. Ainsi le but est d'aller de 4 en 4 jusqu'à l'avant dernier bâtonnet. Avez-vous besoin d'un exemple ?"):
-                 showwarning('Aide : Comment gagner ?', "Prenons l'exemple d'une partie courte à 15 bâtonnets. En suivant le raisonemment précédent, vous devez pour gagner, obtenir le 14ème bâtonnet. Or pour l'atteindre vous devez aller de 4 en 4 et donc tenter de vous emparer des bâtonnets 2, 6 ou 10. Une fois ceci fait, il suffit de compléter le tirage de l'adversaire comme vu précédemment. Vous êtes maintenant au point, bonne chance !")
+                 showinfo('Aide : Comment gagner ?', "Prenons l'exemple d'une partie courte à 15 bâtonnets. En suivant le raisonemment précédent, vous devez pour gagner, obtenir le 14ème bâtonnet. Or pour l'atteindre vous devez aller de 4 en 4 et donc tenter de vous emparer des bâtonnets 2, 6 ou 10. Une fois ceci fait, il suffit de compléter le tirage de l'adversaire comme vu précédemment. Vous êtes maintenant au point, bonne chance !")
 
+
+def Fregles():
+    showinfo('Le jeu des bâtonnets ; règles','Les règles du jeu sont simples : chacun leur tour, 2 joueurs retirent de 1 à 3 bâtonnets du plâteau, au choix, et celui retirant le dernier perd la partie.')
 
 
 menu = Tk()
@@ -711,8 +714,9 @@ menu.resizable(0, 0)
 menu['bg']='white'
 
 menubar = Menu(menu)
-menu1 = Menu(menubar, tearoff=100)
+menu1 = Menu(menubar, tearoff=0)
 menu1.add_command(label="Retour menu", command=Fretour)
+menu1.add_command(label="Règles", command=Fregles)
 menu1.add_command(label="Aide", command=Faide)
 menu1.add_separator()
 menu1.add_command(label="Quitter", command=menu.destroy)
