@@ -147,7 +147,7 @@ def Fretour():
         soft.destroy()
     except NameError:
         pass
-
+    try :
         normal.destroy()
     except NameError:
         pass
